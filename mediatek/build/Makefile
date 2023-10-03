@@ -3,7 +3,7 @@ __mtk_main_makefile_include := true
 
 # Makefile - global makefile for all building system to include
 ifneq (,$(PROJECT))
-TARGET_PRODUCT := $(PROJECT)
+TARGET_PRODUCT := hulkbuster
 endif
 ifeq (emulator,$(TARGET_PRODUCT))
 TARGET_PRODUCT := generic
