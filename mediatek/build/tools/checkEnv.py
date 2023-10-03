@@ -100,6 +100,8 @@ checkResult  = 0
 class OsCheck(object):
     """ check the requirement for os """
     def __init__(self):
+        self.osVersion = ""
+        self.osBit = ""
         self.platform = sys.platform
         self.flag = "FAIL" 
         self.tag = True
