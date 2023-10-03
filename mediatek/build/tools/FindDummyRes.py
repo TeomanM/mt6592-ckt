@@ -80,7 +80,7 @@ def find_dummy_res(folder):
         total = len(list)
         check_exist(list,folder)
         if len(list) > 0:
-            print '[Check Res][Unused Res] PackageName ' + ' FileName' + ' Size '
+            print('[Check Res][Unused Res] PackageName ' + ' FileName' + ' Size ')
             dummy_file_size = 0
             for li in list:
                 cmd = 'find %s -name %s'%(folder,li)
@@ -93,15 +93,15 @@ def find_dummy_res(folder):
                         size = size + size_temp  
 #                        print os.getcwd()
 #                        print '[check res][Unused res] ' + package_name + ' ' + folder + li + ' ' +str(size)
-                        print '[Check Res][Unused Res] ' \
+                        print('[Check Res][Unused Res] ' \
                             + package_name \
                             + ' ' +file.split(os.getcwd(),1)[0]+ ' ' \
-                            + str(size) + ('bytes' if str(size)>1 else 'byte')
+                            + str(size) + ('bytes' if str(size)>1 else 'byte'))
                         dummy_file_size = dummy_file_size + size
-            print '[Check Res][Unused Res Sum] ' \
+            print('[Check Res][Unused Res Sum] ' \
                 + package_name \
                 + ' %d'%(len(list)) + ('Files' if len(list)>1 else 'File') + '(%d'%(len(list)*100/total if len(list)*100/total>0 else 1)+'%) ' \
-                + str(dummy_file_size) + ('bytes' if str(dummy_file_size)>1 else 'byte')
+                + str(dummy_file_size) + ('bytes' if str(dummy_file_size)>1 else 'byte'))
     
 def find_process_folder(dir):
     folder_list=[]
@@ -123,7 +123,7 @@ def main():
             #print 'Process folder : ' + li
             find_dummy_res(folder)
     else:
-        print "the process directory not assign !!!"
+        print("the process directory not assign !!!")
 
 def find_process_folder_packagename(dir):
     folder_list=[]

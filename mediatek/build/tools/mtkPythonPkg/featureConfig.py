@@ -11,7 +11,7 @@ def getFeatureConfig(path):
    """
    configPath = os.path.normpath(path)
    if not os.path.exists(configPath):
-      print >> sys.stderr,"the given path %s does not exist!" % configPath
+      print("the given path %s does not exist!" % configPath, file=sys.stderr)
       sys.exit(1)
    featrueDict = {}
    pattern = re.compile("(\S+)\s*=\s*(\S+)")

@@ -4,7 +4,7 @@ from optparse import OptionParser
 import sys
 import os
 import re
-import commands
+import subprocess
 
 parser = OptionParser(usage="usage: %prog [options]",version="%prog 1.3")
 parser.add_option("-a","--all",action="store_true",help="check all the build environment")
@@ -72,25 +72,25 @@ def result(category,version,bit,flag,info):
             resultInfo = "[%s]: %s (%s-bit) [%s]\n%s\n" % (category,version,bit,flag,info)
         else:
             resultInfo = "[%s]: %s (%s-bit) [%s]" % (category,version,bit,flag)
-        print >> sys.stdout,resultInfo
+        print(resultInfo, file=sys.stdout)
     elif version != "":
         if info != "":
             resultInfo = "[%s]: %s [%s]\n%s\n" % (category,version,flag,info)
         else:
             resultInfo = "[%s]: %s [%s]" % (category,version,flag)
-        print >> sys.stdout,resultInfo
+        print(resultInfo, file=sys.stdout)
     elif bit != "":
         if info != "":
             resultInfo = "[%s]: (%s-bit) [%s]\n%s\n" % (category,bit,flag,info)
         else:
             resultInfo = "[%s]: (%s-bit) [%s]" % (category,bit,flag)
-        print >> sys.stdout,resultInfo
+        print(resultInfo, file=sys.stdout)
     else:
         if info != "":
             resultInfo = ("[%s]: [%s]\n" + "%s\n") % (category,flag,info)
         else:
             resultInfo = "[%s]: [%s]" % (category,flag)
-        print >> sys.stdout,resultInfo
+        print(resultInfo, file=sys.stdout)
 
 # end result
 
@@ -126,7 +126,7 @@ class OsCheck(object):
             checkResult = 2
 
     def checkLinuxVersion(self):
-        linuxVersion = commands.getoutput("lsb_release -d")
+        linuxVersion = subprocess.getoutput("lsb_release -d")
         pattern = re.compile("Description\s*:\s*(([\w\s]*?)([\d\.]+))")
         match = pattern.match(linuxVersion)
         if match:
@@ -152,7 +152,7 @@ class OsCheck(object):
                 self.info = "your Linux distribution is not Ubuntu which we recommendation"
    
     def checkOsBit(self):
-        arch = commands.getoutput("uname -m")
+        arch = subprocess.getoutput("uname -m")
         pattern = re.compile(".*?_(\d+)")
         match = pattern.match(arch)
         if match:
@@ -179,7 +179,7 @@ class MemoryCheck(object):
         self.checkMemorySize()
 
     def checkMemorySize(self):
-        freeMem = commands.getoutput("free -k")
+        freeMem = subprocess.getoutput("free -k")
         pattern = re.compile(".*Mem:\s*(\d+)",re.S)
         match = pattern.match(freeMem)
         if match:
@@ -200,11 +200,11 @@ class MemoryCheck(object):
             self.memSize = "unknown"
 
         if self.info != "":
-            print >> sys.stdout,("[Physical Memory Size] : " 
-                                + "%s K-Bytes [%s]\n%s\n") % (self.memSize,self.flag,self.info)
+            print(("[Physical Memory Size] : " 
+                                + "%s K-Bytes [%s]\n%s\n") % (self.memSize,self.flag,self.info), file=sys.stdout)
         else:
-            print >> sys.stdout,("[Physical Memory Size] : " 
-                                + "%s K-Bytes [%s]") % (self.memSize,self.flag)
+            print(("[Physical Memory Size] : " 
+                                + "%s K-Bytes [%s]") % (self.memSize,self.flag), file=sys.stdout)
 
 #end MemoryCheck
 
@@ -221,7 +221,7 @@ class PerlCheck(object):
             self.checkPerlVersion()
 
     def checkInstall(self):
-        returnCode,self.perl = commands.getstatusoutput("which perl")
+        returnCode,self.perl = subprocess.getstatusoutput("which perl")
         if returnCode != 0:
             self.info = "you have not installed perl"
             self.tag = False
@@ -230,7 +230,7 @@ class PerlCheck(object):
             checkResult = 1
 
     def checkPerlVersion(self):
-        perlVersion = commands.getoutput("%s -v" % self.perl)
+        perlVersion = subprocess.getoutput("%s -v" % self.perl)
         pattern = re.compile(".*?v([\d\.]+)\s*",re.S)
         match = pattern.match(perlVersion)
         if match:
@@ -244,7 +244,7 @@ class PerlCheck(object):
                self.flag = "WARNING"
                self.info = "your perl version is higher than recommendation"
         else: versionNo = "unknown"
-        perlBit = commands.getoutput("file -bL %s" % self.perl)
+        perlBit = subprocess.getoutput("file -bL %s" % self.perl)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(perlBit)
         if match:
@@ -270,8 +270,8 @@ class PythonCheck(object):
         self.checkPythonVersion()
 
     def checkPythonVersion(self):
-        self.python = commands.getoutput("which python")
-        pythonVersion = commands.getoutput("%s -V" % self.python)
+        self.python = subprocess.getoutput("which python")
+        pythonVersion = subprocess.getoutput("%s -V" % self.python)
         pattern = re.compile("Python\s*([\d\.]+)")
         match = pattern.match(pythonVersion)
         if match:
@@ -285,7 +285,7 @@ class PythonCheck(object):
                self.flag = "WARNING"
                self.info = "your python version is higher than recommendation"
         else: versionNo = "unknown"
-        pythonBit = commands.getoutput("file -bL %s" % self.python)
+        pythonBit = subprocess.getoutput("file -bL %s" % self.python)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(pythonBit)
         if match:
@@ -312,7 +312,7 @@ class MakeCheck(object):
             self.checkMakeVersion()
 
     def checkInstall(self):
-        returnCode,self.make = commands.getstatusoutput("which make")
+        returnCode,self.make = subprocess.getstatusoutput("which make")
         if returnCode != 0:
             self.info = "you have not installed make"
             self.tag = False
@@ -321,7 +321,7 @@ class MakeCheck(object):
             checkResult = 1
 
     def checkMakeVersion(self):
-        makeVersion = commands.getoutput("%s -v" % self.make)
+        makeVersion = subprocess.getoutput("%s -v" % self.make)
         pattern = re.compile("GNU\s*Make\s*([\d\.]+)\s*",re.S)
         match = pattern.match(makeVersion)
         if match:
@@ -334,7 +334,7 @@ class MakeCheck(object):
             else:
                self.info = "Android can only be built by versions 3.81 and 3.82."
         else: self.versionNo = "unknown"
-        makeBit = commands.getoutput("file -bL %s" % self.make)
+        makeBit = subprocess.getoutput("file -bL %s" % self.make)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(makeBit)
         if match:
@@ -361,8 +361,8 @@ class JavaCheck(object):
             self.checkJavaVersion()
 
     def checkInstall(self):
-        returnCode1,self.javac = commands.getstatusoutput("which javac")
-        returnCode2,self.java = commands.getstatusoutput("which java")
+        returnCode1,self.javac = subprocess.getstatusoutput("which javac")
+        returnCode2,self.java = subprocess.getstatusoutput("which java")
         if (returnCode1 or returnCode2) != 0:
             self.info = "you have not installed jdk"
             self.tag = False
@@ -371,7 +371,7 @@ class JavaCheck(object):
             checkResult = 1
 
     def checkJavaVersion(self):
-        javaVersion = commands.getoutput("%s -version" % self.java)
+        javaVersion = subprocess.getoutput("%s -version" % self.java)
         pattern = re.compile("java\s*version\s*\"([\d\._]+)",re.S)
         match = pattern.match(javaVersion)
         if match:
@@ -390,7 +390,7 @@ class JavaCheck(object):
         if match:
             self.info = "openjdk is not supported"
             self.flag = "FAIL"
-        jdkBit = commands.getoutput("file -bL %s" % self.java)
+        jdkBit = subprocess.getoutput("file -bL %s" % self.java)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(jdkBit)
         if match:
@@ -417,7 +417,7 @@ class GccCheck(object):
             self.checkGccVersion()
 
     def checkInstall(self):
-        returnCode,self.gcc = commands.getstatusoutput("which gcc")
+        returnCode,self.gcc = subprocess.getstatusoutput("which gcc")
         if returnCode != 0:
             self.info = "you have not installed gcc"
             self.tag = False
@@ -426,7 +426,7 @@ class GccCheck(object):
             checkResult = 1
 
     def checkGccVersion(self):
-        gccVersion = commands.getoutput("%s -v" % self.gcc)
+        gccVersion = subprocess.getoutput("%s -v" % self.gcc)
         pattern = re.compile(".*gcc\s*version\s*([\d\.]+)",re.S)
         match = pattern.match(gccVersion)
         if match:
@@ -442,7 +442,7 @@ class GccCheck(object):
                self.flag = "WARNING"
                self.info = "your gcc version is higher than recommendation"
         else: self.versionNo = "unknown"
-        gccBit = commands.getoutput("file -bL %s" % self.gcc)
+        gccBit = subprocess.getoutput("file -bL %s" % self.gcc)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(gccBit)
         if match:
@@ -469,7 +469,7 @@ class EabiCheck(object):
             self.checkEabiVersion()
 
     def checkInstall(self):
-        returnCode,self.eabigcc = commands.getstatusoutput("which arm-linux-androideabi-gcc")
+        returnCode,self.eabigcc = subprocess.getstatusoutput("which arm-linux-androideabi-gcc")
         if returnCode != 0:
             self.info = "you have not installed arm-linux-androideabi-gcc"
             self.tag = False
@@ -478,7 +478,7 @@ class EabiCheck(object):
             checkResult = 1
 
     def checkEabiVersion(self):
-        eabiVersion = commands.getoutput("%s --version" % self.eabigcc)
+        eabiVersion = subprocess.getoutput("%s --version" % self.eabigcc)
         pattern = re.compile("arm-linux-androideabi-gcc.*?([\d\.]+)",re.S)
         match = pattern.match(eabiVersion)
         if match:
@@ -492,7 +492,7 @@ class EabiCheck(object):
         else:
             self.versionNo = "unknown version"
             self.info = "eabigcc: %s \n version info: %s \n" % (self.eabigcc,eabiVersion)
-        eabiBit = commands.getoutput("file -bL %s" % self.eabigcc)
+        eabiBit = subprocess.getoutput("file -bL %s" % self.eabigcc)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(eabiBit)
         if match:
@@ -520,7 +520,7 @@ class BisonCheck(object):
             self.checkBisonVersion()
 
     def checkInstall(self):
-        returnCode,self.bison = commands.getstatusoutput("which bison")
+        returnCode,self.bison = subprocess.getstatusoutput("which bison")
         if returnCode != 0:
             self.info = "you have not installed bison"
             self.tag = False
@@ -529,7 +529,7 @@ class BisonCheck(object):
             checkResult = 1
 
     def checkBisonVersion(self):
-        bisonVersion = commands.getoutput("%s --version" % self.bison)
+        bisonVersion = subprocess.getoutput("%s --version" % self.bison)
         pattern = re.compile("bison.*?([\d\.]+)",re.S)
         match = pattern.match(bisonVersion)
         if match:
@@ -543,7 +543,7 @@ class BisonCheck(object):
                self.flag = "WARNING"
                self.info = "your bison version is higher than recommendation"
         else: self.versionNo = "unknown"
-        bisonBit = commands.getoutput("file -bL %s" % self.bison)
+        bisonBit = subprocess.getoutput("file -bL %s" % self.bison)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(bisonBit)
         if match:
@@ -570,7 +570,7 @@ class FlexCheck(object):
             self.checkFlexVersion()
 
     def checkInstall(self):
-        returnCode,self.flex = commands.getstatusoutput("which flex")
+        returnCode,self.flex = subprocess.getstatusoutput("which flex")
         if returnCode != 0:
             self.info = "you have not installed flex"
             self.tag = False
@@ -579,7 +579,7 @@ class FlexCheck(object):
             checkResult = 1
 
     def checkFlexVersion(self):
-        flexVersion = commands.getoutput("%s --version" % self.flex)
+        flexVersion = subprocess.getoutput("%s --version" % self.flex)
         pattern = re.compile("flex\s*([\d\.]+)",re.S)
         match = pattern.match(flexVersion)
         if match:
@@ -593,7 +593,7 @@ class FlexCheck(object):
                self.flag = "WARNING"
                self.info = "your flex version is higher than recommendation"
         else: self.versionNo = "unknown"
-        flexBit = commands.getoutput("file -bL %s" % self.flex)
+        flexBit = subprocess.getoutput("file -bL %s" % self.flex)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(flexBit)
         if match:
@@ -620,7 +620,7 @@ class GperfCheck(object):
             self.checkGperfVersion()
 
     def checkInstall(self):
-        returnCode,self.gperf = commands.getstatusoutput("which gperf")
+        returnCode,self.gperf = subprocess.getstatusoutput("which gperf")
         if returnCode != 0:
             self.info = "you have not installed gperf"
             self.tag = False
@@ -629,7 +629,7 @@ class GperfCheck(object):
             checkResult = 1
 
     def checkGperfVersion(self):
-        gperfVersion = commands.getoutput("%s --version" % self.gperf)
+        gperfVersion = subprocess.getoutput("%s --version" % self.gperf)
         pattern = re.compile("GNU\s*gperf\s*([\d\.]+)",re.S)
         match = pattern.match(gperfVersion)
         if match:
@@ -643,7 +643,7 @@ class GperfCheck(object):
                self.flag = "WARNING"
                self.info = "your gperf version is higher than recommendation"
         else: self.versionNo = "unknown"
-        gperfBit = commands.getoutput("file -bL %s" % self.gperf)
+        gperfBit = subprocess.getoutput("file -bL %s" % self.gperf)
         pattern = re.compile("ELF\s*(\d+)-bit\s*LSB\s*executable.*")
         match = pattern.match(gperfBit)
         if match:
@@ -668,7 +668,7 @@ class MingwCheck(object):
         self.checkInstall()
 
     def checkInstall(self):
-        returnCode,self.mingw = commands.getstatusoutput("which i586-mingw32msvc-gcc")
+        returnCode,self.mingw = subprocess.getstatusoutput("which i586-mingw32msvc-gcc")
         if returnCode != 0:
             self.info = "you have not installed mingw32(i586-mingw32msvc-gcc is NOT in your path)"
             self.tag = False
@@ -692,8 +692,8 @@ class Unix2DosCheck(object):
         self.checkInstall()
 
     def checkInstall(self):
-        returnCode1,self.todos = commands.getstatusoutput("which todos")
-        returnCode2,self.unix2dos = commands.getstatusoutput("which unix2dos")
+        returnCode1,self.todos = subprocess.getstatusoutput("which todos")
+        returnCode2,self.unix2dos = subprocess.getstatusoutput("which unix2dos")
         if returnCode1 and returnCode2 != 0:
             self.info = "you have not installed unix2dos/tofrodos command(unix2dos/todos is NOT in your path)"
             self.tag = False
@@ -729,55 +729,55 @@ Build Environment Requirement
 =============================================================
 
 """
-    print >> sys.stdout,suggestInfo
+    print(suggestInfo, file=sys.stdout)
 
 # end suggest
 
 suggest()
-print >> sys.stdout,"Build Environment Check Result Report"
-print >> sys.stdout,"*************************************************************\n"
+print("Build Environment Check Result Report", file=sys.stdout)
+print("*************************************************************\n", file=sys.stdout)
 for item in optionsList:
-    if item.has_key("os") and item.get("os") == True:
+    if "os" in item and item.get("os") == True:
         o = OsCheck()
         o.checkEnv()
         if checkResult == 2:
            break 
-    elif item.has_key("perl") and item.get("perl") == True:
+    elif "perl" in item and item.get("perl") == True:
         p = PerlCheck()
         p.checkEnv()
-    elif item.has_key("python") and item.get("python") == True:
+    elif "python" in item and item.get("python") == True:
         p = PythonCheck()
         p.checkEnv()
-    elif item.has_key("make") and item.get("make") == True:
+    elif "make" in item and item.get("make") == True:
         m = MakeCheck()
         m.checkEnv()
-    elif item.has_key("jdk") and item.get("jdk") == True:
+    elif "jdk" in item and item.get("jdk") == True:
         j = JavaCheck()
         j.checkEnv()
-    elif item.has_key("gcc") and item.get("gcc") == True:
+    elif "gcc" in item and item.get("gcc") == True:
         g = GccCheck()
         g.checkEnv()
-    elif item.has_key("eabi") and item.get("eabi") == True:
+    elif "eabi" in item and item.get("eabi") == True:
         e = EabiCheck()
         e.checkEnv()
-    elif item.has_key("bison") and item.get("bison") == True:
+    elif "bison" in item and item.get("bison") == True:
         b = BisonCheck()
         b.checkEnv()
-    elif item.has_key("flex") and item.get("flex") == True:
+    elif "flex" in item and item.get("flex") == True:
         f = FlexCheck()
         f.checkEnv()
-    elif item.has_key("gperf") and item.get("gperf") == True:
+    elif "gperf" in item and item.get("gperf") == True:
         g = GperfCheck()
         g.checkEnv()
-    elif item.has_key("mingw") and item.get("mingw") == True:
+    elif "mingw" in item and item.get("mingw") == True:
         m = MingwCheck()
         m.checkEnv()
-    elif item.has_key("unix2dos") and item.get("unix2dos") == True:
+    elif "unix2dos" in item and item.get("unix2dos") == True:
         m = Unix2DosCheck()
         m.checkEnv()
-    elif item.has_key("memory") and item.get("memory") == True:
+    elif "memory" in item and item.get("memory") == True:
         m = MemoryCheck()
         m.checkEnv()
 
-print >> sys.stdout,"*************************************************************\n"
+print("*************************************************************\n", file=sys.stdout)
 sys.exit(checkResult)

@@ -6,9 +6,9 @@
     -r    refactor feature options
     -n    transform a flavor project to a base project
 '''
-import os, sys, ConfigParser, pprint
+import os, sys, configparser, pprint
 
-class MyConfigParser(ConfigParser.RawConfigParser):
+class MyConfigParser(configparser.RawConfigParser):
     def optionxform(self, optionstr):
         return optionstr
             
@@ -41,7 +41,7 @@ a = sys.argv
 l = len(a)
 
 if l < 4 or a[1][0] != '-':
-    print __doc__ % a[0]
+    print(__doc__ % a[0])
     sys.exit()
 
 kOp = a.pop(1)[1]
@@ -61,7 +61,7 @@ parse_mk(pConfig % (a[1], aConfig[1]), m)
 strPlatform = m.get('MTK_PLATFORM', '')
 if strPlatform:
     aConfig.insert(1, strPlatform.lower())
-    print 'MTK_PLATFORM', strPlatform
+    print('MTK_PLATFORM', strPlatform)
 
 # merge configures
 m1 = {}
@@ -76,17 +76,17 @@ if kOp != 'm':
 for i in aConfig:
     parse_mk(pConfig % (a[1], i), m)
 
-for k, v in mGlobal.items():
+for k, v in list(mGlobal.items()):
     mGlobal[k] = list( set(v) )
 
 if m1:
-    m = m.items()
-    m1 = m1.items()
+    m = list(m.items())
+    m1 = list(m1.items())
     m = list( set(m) - set(m1) )
 else:
-    for k, v in mGlobal.items():
+    for k, v in list(mGlobal.items()):
         m[k] = ' '.join(v)
-    m = m.items()
+    m = list(m.items())
 
 fFeature = a[1] + '/mediatek/config/feature_option_info.ini'
 mFeature = {}
@@ -121,7 +121,7 @@ f.close()
 f = pConfig % (a[1], 'common')
 d = open(f).read()
 
-for k, v in mGlobal.items():
+for k, v in list(mGlobal.items()):
     i = d.find(k)
     j = d.find('\n', i)
     d = d[:i] + k + '=' + ' '.join(v) + d[j:]

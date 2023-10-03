@@ -30,12 +30,12 @@ def main():
     try:
         shrinkFile = open(args[1], "r")
     except:
-        print 'open shrink: %s error' % (args[1])
+        print('open shrink: %s error' % (args[1]))
         return
     try:
         outputFile = open(args[2], "w")
     except:
-        print 'open output: %s error' % (args[2])
+        print('open output: %s error' % (args[2]))
         return
     
     lines = shrinkFile.readlines()

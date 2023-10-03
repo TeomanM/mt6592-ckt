@@ -46,7 +46,7 @@ def writeProGuard(javaMethods, filePath):
             file.write('  *** ' + method + '(...);\n')
             file.write('}\n\n')
     except:
-        print 'open error' + filePath
+        print('open error' + filePath)
 
 def main():
     parser = OptionParser(usage="usage: %prog input_directory",version="%prog 1.0")
@@ -58,8 +58,8 @@ def main():
     curDir = os.getcwd()
     inDir = curDir + '/' + args[0]
     outDir = curDir + '/' + args[1]
-    print 'input dir: ' + inDir
-    print 'output dir: ' + outDir
+    print('input dir: ' + inDir)
+    print('output dir: ' + outDir)
     
     javaMethods = list()
     for root, dirs, files in os.walk(inDir):

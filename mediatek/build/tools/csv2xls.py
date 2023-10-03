@@ -7,7 +7,7 @@ import sys
 import xlwt
 
 def csv2xls(namefile,resfpath,xlsfname):
-    print 'converting xls ... '
+    print('converting xls ... ')
     ff = open(namefile)
     fn = ff.readline()
     xls=xlwt.Workbook()

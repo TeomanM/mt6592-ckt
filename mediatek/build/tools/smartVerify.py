@@ -25,14 +25,14 @@ ARGUMENTS.xml = os.path.abspath(args[2])
 def checkArgument(argu):
     """ check the argument """
     if not os.path.exists(argu.releaseSrc):
-        print >> sys.stderr,"the input releaseSrc '%s' does not exist!" % argu.releaseSrc
+        print("the input releaseSrc '%s' does not exist!" % argu.releaseSrc, file=sys.stderr)
         sys.exit(1)
     if not os.path.exists(argu.xml):
-        print >> sys.stderr,"the input xml '%s' does not exist!" % argu.xml
+        print("the input xml '%s' does not exist!" % argu.xml, file=sys.stderr)
         sys.exit(1)
     projTargetFolder = "%s/out/target/product/%s" % (argu.releaseSrc,argu.project)
     if not os.path.exists(projTargetFolder):
-        print >> sys.stderr,"the input project '%s' is illegal or the codebase '%s' had not full built yet!please check it!" % (argu.project,argu.releaseSrc)
+        print("the input project '%s' is illegal or the codebase '%s' had not full built yet!please check it!" % (argu.project,argu.releaseSrc), file=sys.stderr)
         sys.exit(1)
 
 checkArgument(ARGUMENTS)
@@ -48,73 +48,73 @@ class XmlDom(object):
     def getDirList(self):
         root = self.getRoot()
         dirElement = root.getElementsByTagName("DirList")[0].getElementsByTagName("ReleaseDirList")[0].getElementsByTagName("Dir")
-        dirList = map(str,[item.firstChild.nodeValue for item in dirElement if item.firstChild is not None])
+        dirList = list(map(str,[item.firstChild.nodeValue for item in dirElement if item.firstChild is not None]))
         return dirList
 
     def getUnreleaseDirList(self):
         root = self.getRoot()
         dirElement = root.getElementsByTagName("DirList")[0].getElementsByTagName("UnReleaseDirList")[0].getElementsByTagName("Dir")
-        dirList = map(str,[item.firstChild.nodeValue for item in dirElement if item.firstChild is not None])
+        dirList = list(map(str,[item.firstChild.nodeValue for item in dirElement if item.firstChild is not None]))
         return dirList
 
     def getFileList(self):
         root = self.getRoot()
         fileElement = root.getElementsByTagName("FileList")[0].getElementsByTagName("ReleaseFileList")[0].getElementsByTagName("File")
-        fileList = map(str,[item.firstChild.nodeValue for item in fileElement if item.firstChild is not None])
+        fileList = list(map(str,[item.firstChild.nodeValue for item in fileElement if item.firstChild is not None]))
         return fileList
 
     def getUnreleaseFileList(self):
         root = self.getRoot()
         fileElement = root.getElementsByTagName("FileList")[0].getElementsByTagName("UnReleaseFileList")[0].getElementsByTagName("File")
-        fileList = map(str,[item.firstChild.nodeValue for item in fileElement if item.firstChild is not None])
+        fileList = list(map(str,[item.firstChild.nodeValue for item in fileElement if item.firstChild is not None]))
         return fileList
 
     def getKernelSourceList(self):
         root = self.getRoot()
         sourceElement = root.getElementsByTagName("KernelRelease")[0].getElementsByTagName("SourceList")[0].getElementsByTagName("Source")
-        sourceList = map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None])
+        sourceList = list(map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None]))
         return sourceList
 
     def getKernelBinaryList(self):
         root = self.getRoot()
         binaryElement = root.getElementsByTagName("KernelRelease")[0].getElementsByTagName("BINList")[0].getElementsByTagName("Binary")
-        binaryList = map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None])
+        binaryList = list(map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None]))
         return binaryList
 
     def getAppSourceList(self):
         root = self.getRoot()
         sourceElement = root.getElementsByTagName("APPRelease")[0].getElementsByTagName("SourceList")[0].getElementsByTagName("Source")
-        sourceList = map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None])
+        sourceList = list(map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None]))
         return sourceList
 
     def getAppBinaryList(self):
         root = self.getRoot()
         binaryElement = root.getElementsByTagName("APPRelease")[0].getElementsByTagName("BINList")[0].getElementsByTagName("Binary")
-        binaryList = map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None])
+        binaryList = list(map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None]))
         return binaryList
 
     def getAndroidSourceList(self):
         root = self.getRoot()
         sourceElement = root.getElementsByTagName("AndroidRelease")[0].getElementsByTagName("SourceList")[0].getElementsByTagName("Source")
-        sourceList = map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None])
+        sourceList = list(map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None]))
         return sourceList
 
     def getAndroidBinaryList(self):
         root = self.getRoot()
         binaryElement = root.getElementsByTagName("AndroidRelease")[0].getElementsByTagName("BINList")[0].getElementsByTagName("Binary")
-        binaryList = map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None])
+        binaryList = list(map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None]))
         return binaryList
 
     def getFrameworkSourceList(self):
         root = self.getRoot()
         sourceElement = root.getElementsByTagName("FrameworkRelease")[0].getElementsByTagName("SourceList")[0].getElementsByTagName("Source")
-        sourceList = map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None])
+        sourceList = list(map(str,[item.firstChild.nodeValue for item in sourceElement if item.firstChild is not None]))
         return sourceList
 
     def getFrameworkBinaryList(self):
         root = self.getRoot()
         binaryElement = root.getElementsByTagName("FrameworkRelease")[0].getElementsByTagName("BINList")[0].getElementsByTagName("Binary")
-        binaryList = map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None])
+        binaryList = list(map(str,[item.firstChild.nodeValue for item in binaryElement if item.firstChild is not None]))
         return binaryList
 
     def getFrameworkPartialList(self):
@@ -124,7 +124,7 @@ class XmlDom(object):
         for x in partialElement:
             module = str(x.getAttribute("module"))
             base = str(x.getAttribute("base"))
-            binaryList = map(str,[item.firstChild.nodeValue for item in x.getElementsByTagName("Binary") if item.firstChild is not None])
+            binaryList = list(map(str,[item.firstChild.nodeValue for item in x.getElementsByTagName("Binary") if item.firstChild is not None]))
             d = {}
             d["base"] = base
             d["binary_list"] = binaryList
@@ -205,7 +205,7 @@ binModules = []
 
 def getReleasePathTable():
     if not os.path.exists(releasePathHash):
-        print >> sys.stderr,"Error!the path map file '%s' does not exist!" % releasePathHash
+        print("Error!the path map file '%s' does not exist!" % releasePathHash, file=sys.stderr)
         sys.exit(1)
     pathTable = {}
     pattern = re.compile("(\S+)\s*->\s*(\S+)")
@@ -223,7 +223,7 @@ def getReleasePathTable():
 
 def getReleaseModuleTable():
     if not os.path.exists(releasePathHash):
-        print >> sys.stderr,"Error!the path map file '%s' does not exist!" % releasePathHash
+        print("Error!the path map file '%s' does not exist!" % releasePathHash, file=sys.stderr)
         sys.exit(1)
     moduleTable = {}
     pattern = re.compile("(\S+)\s*->\s*(\S+)")
@@ -241,7 +241,7 @@ def getReleaseModuleTable():
 
 def getInstalledPathTable():
     if not os.path.exists(installModulePathHash):
-        print >> sys.stderr,"Error!the path map file '%s' does not exist!" % installModulePathHash
+        print("Error!the path map file '%s' does not exist!" % installModulePathHash, file=sys.stderr)
         sys.exit(1)
     moduleTable = {}
     pattern = re.compile("(\S+)\s*->\s*(\S+)")
@@ -303,7 +303,7 @@ class KernelRelease(object):
     
     def releaseMak(self,kbFolder):
         srcDir = os.path.join(self.src,kbFolder)
-        srcObjs = map(lambda x:x.rstrip(),list(os.popen("find %s -name '*.o' -exec basename {} \\;" % srcDir)))
+        srcObjs = [x.rstrip() for x in list(os.popen("find %s -name '*.o' -exec basename {} \\;" % srcDir))]
         pathList = kbFolder.split('/')
         for i in range(len(pathList)-1,0,-1):
             makDir = '/'.join(pathList[:i])
@@ -326,13 +326,13 @@ class KernelRelease(object):
 
     def releaseObj(self,kbFolder):
         srcDir = os.path.join(self.src,kbFolder)
-        srcObjs = map(lambda x:x.rstrip(),list(os.popen("find %s -name '*.o'" % srcDir)))
+        srcObjs = [x.rstrip() for x in list(os.popen("find %s -name '*.o'" % srcDir))]
         for obj in srcObjs:
             obj_module = "%s.module" % os.path.splitext(os.path.basename(obj))[0]
             destDir = os.path.join(self.kernelDestVendor,os.path.dirname(obj[len(self.src)+1:]))
             if not os.path.exists(destDir):
                 os.makedirs(destDir)
-            print >> sys.stdout,"Kernel Binary(.o) Release:release %s ..." % obj
+            print("Kernel Binary(.o) Release:release %s ..." % obj, file=sys.stdout)
             os.system("rsync -a %s %s/%s" % (obj,destDir,obj_module))
 
     def releaseKo(self,kbFolder):
@@ -343,7 +343,7 @@ class KernelRelease(object):
         srcKos = list(os.popen("find %s -name '*.ko'" % srcDir))
         for ko in srcKos:
             ko = ko.rstrip()
-            print >> sys.stdout,"Kernel Binary(.ko) Release:release %s ..." % ko
+            print("Kernel Binary(.ko) Release:release %s ..." % ko, file=sys.stdout)
             os.system("cp -a %s %s" % (os.path.join(sharelibFolder,"modules",os.path.basename(ko)),koDir))
 
 #end KernelRelease
@@ -405,7 +405,7 @@ class AndroidRelease(object):
             if dr.find("/") == -1:
                 mdIdList = self.transformModuleId(dr)
                 for md in mdIdList:
-                    if self.releaseModuleTable.has_key(md):
+                    if md in self.releaseModuleTable:
                         # -------------------------------------
                         # save the moduleIdLIst into binModules
                         binModules.extend(md)
@@ -420,7 +420,7 @@ class AndroidRelease(object):
             if flag:    
                 srcPart = os.path.join(self.src,dr)
                 if not os.path.exists(srcPart):
-                    print >> sys.stderr,"Error!Android Release Binary Directory '%s' does not exists!" % srcPart
+                    print("Error!Android Release Binary Directory '%s' does not exists!" % srcPart, file=sys.stderr)
                     sys.exit(6)
                 # remove the destination relative part
                 destPart = os.path.join(self.src,dr)
@@ -431,8 +431,8 @@ class AndroidRelease(object):
     def getBinary(self,drFolder):
         drFolder = os.path.join(self.src,drFolder)
         # find all the binary release Android.mk under given folder
-        androidMkList = map(lambda x:x.rstrip(),list(os.popen("find %s -name Android.mk" % drFolder)))
-        androidMkPaths = map(lambda x:os.path.dirname(x),androidMkList)
+        androidMkList = [x.rstrip() for x in list(os.popen("find %s -name Android.mk" % drFolder))]
+        androidMkPaths = [os.path.dirname(x) for x in androidMkList]
         # release binaries through the file "path_module_maptable"
         for adrPath in androidMkPaths:
             # adrPath is an absolute path,so for using the LOCAL_PATH -> module_id mapping relationship,remove the prefix(self.src)
@@ -442,7 +442,7 @@ class AndroidRelease(object):
             if not os.path.exists(os.path.join(self.src,adrPath)):
                 os.makedirs(os.path.join(self.src,adrPath))
             os.system("touch %s;echo '#empty' > %s" % (destAndroidMk,destAndroidMk))
-            if self.releasePathTable.has_key(adrPath):
+            if adrPath in self.releasePathTable:
                 moduleIdList = self.releasePathTable.get(adrPath)
                 for md in moduleIdList:
                     self.copyBinary(md)
@@ -452,17 +452,17 @@ class AndroidRelease(object):
                 # -------------------------------------
 
     def copyInstalledModule(self,moduleId):
-        if self.intallledModulePathTable.has_key(moduleId):
+        if moduleId in self.intallledModulePathTable:
             installedModule = self.intallledModulePathTable.get(moduleId)
             installedPath = os.path.dirname(installedModule)
             installedPath_dst = os.path.join(self.src, vendor, installedPath)
             installedModule_src = os.path.join(self.src, installedModule)
             if not os.path.exists(installedModule_src):
-                print >> sys.stdout,"Android Binary Release: %s does not exist..." % installedModule_src
+                print("Android Binary Release: %s does not exist..." % installedModule_src, file=sys.stdout)
             else:
                 if not os.path.exists(installedPath_dst):
                     os.system("mkdir -p %s" % installedPath_dst)
-                print >> sys.stdout,"Android Binary Release:release %s ..." % installedModule
+                print("Android Binary Release:release %s ..." % installedModule, file=sys.stdout)
                 os.system("cp -f %s %s" % (installedModule_src, installedPath_dst))
 
     def copyBinary(self,moduleId):
@@ -484,7 +484,7 @@ class AndroidRelease(object):
                     dirPath = os.path.dirname(destination)
                     if not os.path.exists(dirPath):
                         os.makedirs(dirPath)
-                    print >> sys.stdout,"Android Binary Release:release %s ..." % source
+                    print("Android Binary Release:release %s ..." % source, file=sys.stdout)
                     os.system("rsync -a %s %s" % (source,destination))
             elif moduleClass == "SHARED_LIBRARIES":
                 if moduleTarget  == "TARGET":
@@ -495,7 +495,7 @@ class AndroidRelease(object):
                         dirPath = os.path.dirname(destination)
                         if not os.path.exists(dirPath):
                             os.makedirs(dirPath)
-                        print >> sys.stdout,"Android Binary Release:release %s ..." % source
+                        print("Android Binary Release:release %s ..." % source, file=sys.stdout)
                         os.system("rsync -a %s %s" % (source,destination))
                 elif moduleTarget == "HOST":
                     source = os.path.join(self.sharelibHostIntermediate,"%s.so" % moduleName)
@@ -504,19 +504,19 @@ class AndroidRelease(object):
                         dirPath = os.path.dirname(destination)
                         if not os.path.exists(dirPath):
                             os.makedirs(dirPath)
-                        print >> sys.stdout,"Android Binary Release:release %s ..." % source
+                        print("Android Binary Release:release %s ..." % source, file=sys.stdout)
                         os.system("rsync -a %s %s" % (source,destination))
             elif moduleClass == "JAVA_LIBRARIES":
                 if moduleTarget == "HOST":
                     source = os.path.join(self.frameworkHostFolder,"%s.jar" % moduleName)     
                     destination = os.path.join(self.frameworkHostVendor,"%s.jar" % moduleName)
                     if not os.path.exists(source):
-                        print >> sys.stderr,"Error!Android Release Binary '%s' does not exists!" % source
+                        print("Error!Android Release Binary '%s' does not exists!" % source, file=sys.stderr)
                         sys.exit(7)
                     if not os.path.exists(destination):
                         dirPath = os.path.dirname(destination)
                         os.makedirs(dirPath)
-                    print >> sys.stdout,"Android Binary Release:release %s ..." % source
+                    print("Android Binary Release:release %s ..." % source, file=sys.stdout)
                     os.system("rsync -a %s %s" % (source,destination))
                 if moduleTarget == "TARGET":
                     sourceSysJar = os.path.join(self.frameworkFolder,"%s.jar" % moduleName)
@@ -536,7 +536,7 @@ class AndroidRelease(object):
         dirPath = os.path.dirname(dest)
         if not os.path.exists(dirPath):
             os.makedirs(dirPath)
-        print >> sys.stdout,"Android Binary Release:release %s ..." % src
+        print("Android Binary Release:release %s ..." % src, file=sys.stdout)
         os.system("rsync -a %s %s" % (src,dest))
 
     def release(self):
@@ -574,15 +574,15 @@ class FrameworkRelease(object):
     def getBinary(self,fwFolder):
         fwFolder = os.path.join(self.src,fwFolder)
         if not os.path.exists(fwFolder):
-            print >> sys.stderr,"Error!Framework Release Source Directory/File %s does not exists!" % fwFolder 
+            print("Error!Framework Release Source Directory/File %s does not exists!" % fwFolder, file=sys.stderr) 
             sys.exit(7)
-        androidMkList = map(lambda x:x.rstrip(),list(os.popen("find %s -name Android.mk" % fwFolder)))
-        androidMkPaths = map(lambda x:os.path.dirname(x),androidMkList)
+        androidMkList = [x.rstrip() for x in list(os.popen("find %s -name Android.mk" % fwFolder))]
+        androidMkPaths = [os.path.dirname(x) for x in androidMkList]
         # release binaries through the file "path_module_maptable"
         for adrPath in androidMkPaths:
             # adrPath is an absolute path,so for using the LOCAL_PATH -> module_id mapping relationship,remove the prefix(self.src)
             adrPath = adrPath[len(self.src)+1:]
-            if self.releasePathTable.has_key(adrPath):
+            if adrPath in self.releasePathTable:
                 moduleIdList = self.releasePathTable.get(adrPath)
                 for md in moduleIdList:
                     self.copyBinary(md)
@@ -603,12 +603,12 @@ class FrameworkRelease(object):
                     source = os.path.join(self.frameworkHostFolder,"%s.jar" % moduleName)     
                     destination = os.path.join(self.frameworkHostVendor,"%s.jar" % moduleName)
                     if not os.path.exists(source):
-                        print >> sys.stderr,"Error!Framework Release Binary '%s' does not exists!" % source
+                        print("Error!Framework Release Binary '%s' does not exists!" % source, file=sys.stderr)
                         sys.exit(7)
                     if not os.path.exists(destination):
                         dirPath = os.path.dirname(destination)
                         os.makedirs(dirPath)
-                    print >> sys.stdout,"Framework Binary Release:release %s ..." % source
+                    print("Framework Binary Release:release %s ..." % source, file=sys.stdout)
                     os.system("rsync -a %s %s" % (source,destination))
                 if moduleTarget == "TARGET":
                     sourceSysJar = os.path.join(self.frameworkFolder,"%s.jar" % moduleName)
@@ -628,7 +628,7 @@ class FrameworkRelease(object):
         dirPath = os.path.dirname(dest)
         if not os.path.exists(dirPath):
             os.makedirs(dirPath)
-        print >> sys.stdout,"Framework Binary Release:release %s ..." % src
+        print("Framework Binary Release:release %s ..." % src, file=sys.stdout)
         os.system("rsync -a %s %s" % (src,dest))
         
     def partialRelease(self):
@@ -643,7 +643,7 @@ class FrameworkRelease(object):
                 if not os.path.exists(classesJar):
                     classesJar = os.path.join(self.appIntermediate,"%s_intermediates/classes.jar" % fw)
                     if not os.path.exists(classesJar):
-                        print >> sys.stderr,"Error!Framework Partial Release Binary '%s' does not exists!" % classesJar
+                        print("Error!Framework Partial Release Binary '%s' does not exists!" % classesJar, file=sys.stderr)
                         sys.exit(7)
                     else: appFlag = True
                 zfile = zipfile.ZipFile(classesJar)
@@ -654,11 +654,11 @@ class FrameworkRelease(object):
                 zfile.extractall(classes)
                 if os.path.exists(".tmp"):
                     shutil.rmtree(".tmp")
-                print >> sys.stdout,"Framework Partial Release ..."
+                print("Framework Partial Release ...", file=sys.stdout)
                 # release relative class files
                 for bi in binary_list:
                     if not os.path.exists(os.path.join(self.src,base,bi)):
-                        print >> sys.stderr,"Error!Framework Partial Release '%s' does not exists!" % os.path.join(self.src,base,bi)
+                        print("Error!Framework Partial Release '%s' does not exists!" % os.path.join(self.src,base,bi), file=sys.stderr)
                         sys.exit(7)
                     if os.path.isdir(os.path.join(self.src,base,bi)):
                         # remove the destination binary relative directory
@@ -679,24 +679,24 @@ class FrameworkRelease(object):
                         os.system("cp -a %s* %s" % (os.path.join(classes,biBaseName),os.path.join(".tmp",biPath)))
                         os.system("cp -a %s* %s" % (os.path.join(classes,biBaseName),os.path.join(destCls,biPath)))
                 if not os.path.exists(os.path.join(destJar,fw,"policy.jar")):
-                    print >> sys.stdout,"Framework Partial Release:create the %s/policy.jar ..." % fw
+                    print("Framework Partial Release:create the %s/policy.jar ..." % fw, file=sys.stdout)
                     os.system("jar -cf %s -C .tmp ." % os.path.join(destJar,fw,"policy.jar"))
                 else:
-                    print >> sys.stdout,"Framework Partial Release:add class files into %s/policy.jar ..." % fw
+                    print("Framework Partial Release:add class files into %s/policy.jar ..." % fw, file=sys.stdout)
                     os.system("jar -uf %s -C .tmp ." % os.path.join(destJar,fw,"policy.jar"))
                 # release relative aidl files
                 if not os.path.exists(os.path.join(self.src,base)):
-                    print >> sys.stderr,"Error!Framework Partial Release '%s' does not exists!" % os.path.join(self.src,base)
+                    print("Error!Framework Partial Release '%s' does not exists!" % os.path.join(self.src,base), file=sys.stderr)
                     sys.exit(7)
                 if not os.path.isdir(os.path.join(self.src,base)):
-                    print >> sys.stderr,"Error!Framework Partial Release the base '%s' must be a folder!" % os.path.join(self.src,base)
+                    print("Error!Framework Partial Release the base '%s' must be a folder!" % os.path.join(self.src,base), file=sys.stderr)
                     sys.exit(7)
-                aidlFiles = map(lambda x:x.rstrip(),list(os.popen("find %s -name '*.aidl'" % os.path.join(self.src,base))))
+                aidlFiles = [x.rstrip() for x in list(os.popen("find %s -name '*.aidl'" % os.path.join(self.src,base)))]
                 for aidl in aidlFiles:
                     vendorAidl = os.path.join(self.destCls,aidl[len(os.path.join(self.src,base))+1:])
                     if not os.path.exists(os.path.dirname(vendorAidl)):
                         os.makedirs(os.path.dirname(vendorAidl))
-                    print >> sys.stdout,"Framework Partial Release:release %s ..." % aidl
+                    print("Framework Partial Release:release %s ..." % aidl, file=sys.stdout)
                     os.system("rsync -a %s %s" % (aidl,vendorAidl))
                 if os.path.exists(".tmp"):
                     shutil.rmtree(".tmp") 
@@ -748,13 +748,13 @@ class AppRelease(object):
 
     def getBinary(self,apFolder):
         apFolder = os.path.join(self.src,apFolder)
-        androidMkList = map(lambda x:x.rstrip(),list(os.popen("find %s -name Android.mk" % apFolder)))
-        androidMkPaths = map(lambda x:os.path.dirname(x),androidMkList)
+        androidMkList = [x.rstrip() for x in list(os.popen("find %s -name Android.mk" % apFolder))]
+        androidMkPaths = [os.path.dirname(x) for x in androidMkList]
         # release binaries through the file "path_module_maptable"
         for adrPath in androidMkPaths:
             # adrPath is an absolute path,so for using the LOCAL_PATH -> module_id mapping relationship,remove the prefix(self.src)
             adrPath = adrPath[len(self.src)+1:]
-            if self.releasePathTable.has_key(adrPath):
+            if adrPath in self.releasePathTable:
                 moduleIdList = self.releasePathTable.get(adrPath)
                 for md in moduleIdList:
                     self.copyBinary(md)
@@ -774,24 +774,24 @@ class AppRelease(object):
                 source = "%s/%s.apk" % (self.appSrcSystem,moduleName)
                 destination = "%s/%s.apk" % (self.appDestVendor,moduleName)
                 if not os.path.exists(source):
-                    print >> sys.stderr,"Error!App Release Binary '%s' does not exists!" % source
+                    print("Error!App Release Binary '%s' does not exists!" % source, file=sys.stderr)
                     sys.exit(5)
                 dirPath = os.path.dirname(destination)
                 if not os.path.exists(dirPath):
                     os.makedirs(dirPath)
-                print >> sys.stdout,"App Binary Release:release %s ..." % source
+                print("App Binary Release:release %s ..." % source, file=sys.stdout)
                 os.system("rsync -a %s %s" % (source,destination))
             elif moduleClass == "JAVA_LIBRARIES":
                 if moduleTarget == "HOST":
                     source = os.path.join(self.frameworkHostFolder,"%s.jar" % moduleName)     
                     destination = os.path.join(self.frameworkHostVendor,"%s.jar" % moduleName)
                     if not os.path.exists(source):
-                        print >> sys.stderr,"Error!APP Release Binary '%s' does not exists!" % source
+                        print("Error!APP Release Binary '%s' does not exists!" % source, file=sys.stderr)
                         sys.exit(7)
                     if not os.path.exists(destination):
                         dirPath = os.path.dirname(destination)
                         os.makedirs(dirPath)
-                    print >> sys.stdout,"APP Binary Release:release %s ..." % source
+                    print("APP Binary Release:release %s ..." % source, file=sys.stdout)
                     os.system("rsync -a %s %s" % (source,destination))
                 if moduleTarget == "TARGET":
                     sourceSysJar = os.path.join(self.frameworkFolder,"%s.jar" % moduleName)
@@ -815,7 +815,7 @@ class AppRelease(object):
                         dirPath = os.path.dirname(destination)
                         if not os.path.exists(dirPath):
                             os.makedirs(dirPath)
-                        print >> sys.stdout,"APP Binary Release:release %s ..." % source
+                        print("APP Binary Release:release %s ..." % source, file=sys.stdout)
                         os.system("rsync -a %s %s" % (source,destination))
                     # copy the share library to TARGET_OUT_INTERMEDIATE_LIBRARIES for dependency
                     source = os.path.join(self.sharelibIntermediate,"%s.so" % moduleName)
@@ -824,7 +824,7 @@ class AppRelease(object):
                         dirPath = os.path.dirname(destination)
                         if not os.path.exists(dirPath):
                             os.makedirs(dirPath)
-                        print >> sys.stdout,"APP Binary Release:release %s ..." % source
+                        print("APP Binary Release:release %s ..." % source, file=sys.stdout)
                         os.system("rsync -a %s %s" % (source,destination))
                 elif moduleTarget == "HOST":
                     source = os.path.join(self.sharelibHostFolder,"%s.so" % moduleName)
@@ -833,7 +833,7 @@ class AppRelease(object):
                         dirPath = os.path.dirname(destination)
                         if not os.path.exists(dirPath):
                             os.makedirs(dirPath)
-                        print >> sys.stdout,"APP Binary Release:release %s ..." % source
+                        print("APP Binary Release:release %s ..." % source, file=sys.stdout)
                         os.system("rsync -a %s %s" % (source,destination))
                     source = os.path.join(self.sharelibHostIntermediate,"%s.so" % moduleName)
                     destination = os.path.join(self.sharelibHostVendorIntermediate,"%s.so" % moduleName)
@@ -841,14 +841,14 @@ class AppRelease(object):
                         dirPath = os.path.dirname(destination)
                         if not os.path.exists(dirPath):
                             os.makedirs(dirPath)
-                        print >> sys.stdout,"APP Binary Release:release %s ..." % source
+                        print("APP Binary Release:release %s ..." % source, file=sys.stdout)
                         os.system("rsync -a %s %s" % (source,destination))
 
     def copyJar(self,src,dest):
         dirPath = os.path.dirname(dest)
         if not os.path.exists(dirPath):
             os.makedirs(dirPath)
-        print >> sys.stdout,"APP Binary Release:release %s ..." % src
+        print("APP Binary Release:release %s ..." % src, file=sys.stdout)
         os.system("rsync -a %s %s" % (src,dest))
 
     def release(self):
@@ -888,10 +888,10 @@ class MiscRelease(object):
 
     def removeUnreleasePart(self):
         for d in self.unreleaseFolder:
-            print >> sys.stdout,"Misc Release:removing %s ..." % os.path.join(self.src,d)
+            print("Misc Release:removing %s ..." % os.path.join(self.src,d), file=sys.stdout)
             os.system("rm -rf %s" % os.path.join(self.src,d))
         for f in self.unreleaseFile:
-            print >> sys.stdout,"Misc Release:removing %s ..." % os.path.join(self.src,f)
+            print("Misc Release:removing %s ..." % os.path.join(self.src,f), file=sys.stdout)
             os.system("rm -rf %s" % os.path.join(self.src,f))
 
     def modifyKconfig(self):
@@ -916,7 +916,7 @@ class MiscRelease(object):
 
 # dump the dependency information for MP release
 def dumpDep(binMods):
-    print >> sys.stdout,"dump dependency information ..."
+    print("dump dependency information ...", file=sys.stdout)
     binmds = binMods
     targetTxt = os.path.join(ARGUMENTS.releaseSrc,vendor,"target.txt")
     if os.path.exists(targetTxt):
@@ -957,7 +957,7 @@ def mtkRelease():
     apps.release()
     framework.release()
     misc.release()
-    print >> sys.stdout,"custom release[done]!"
+    print("custom release[done]!", file=sys.stdout)
 
 # end mtkRelease
 

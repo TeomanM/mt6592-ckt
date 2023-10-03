@@ -1,1 +1,1 @@
-from featureConfig import *
+from .featureConfig import *
