@@ -12,7 +12,7 @@ unless (-e $project_config) {
     exit -1;
 }
 
-my $temp = `cat $project_config | grep -P '^CUSTOM_MODEM\\s*=' | head -1 | cut -d '#' -f1 | cut -d '=' -f2 | tr -d [:cntrl:]`;
+my $temp = `cat $project_config | sed -n -E '/^CUSTOM_MODEM\s*=/p' | head -1 | cut -d '#' -f1 | cut -d '=' -f2 | tr -d [:cntrl:]`;
 $temp =~ m/^\s*(.*)\s*$/;
 $temp = $1;
 

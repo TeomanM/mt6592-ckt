@@ -161,7 +161,7 @@ MTK_CUSTOM_FOLDERS  := $(call .mtk.custom.generate-folder-list)
 # it is necessary to have MTK_PROJECT here, to prevent empty project file
 export_var :=
 $(foreach p,$(MTK_PROJECT_CONFIGS),$(foreach f,$(strip $(shell cat $p | \
-    grep -v -P "^\s*#" | sed 's/\s*=\s*.*//g')),$(eval export_var+=$f)))
+    sed -E '/^\s*#/d' | sed 's/\s*=\s*.*//g')),$(eval export_var+=$f)))
 export_var+= MTK_PROJECT
 $(foreach i,$(export_var),$(eval $i=$(strip $($i))))
 $(eval export $(export_var))
