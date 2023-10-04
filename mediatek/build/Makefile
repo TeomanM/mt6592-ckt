@@ -10,7 +10,8 @@ TARGET_PRODUCT := generic
 endif
 _entering_makefile_list_ := $(MAKEFILE_LIST)
 ifeq (,$(TARGET_PRODUCT))
-  $(error TARGET_PRODUCT/PROJECT is not set)
+  TARGET_PRODUCT := hulkbuster
+  # $(error TARGET_PRODUCT/PROJECT is not set)
 endif
 ifndef OUT_DIR
   OUT_DIR := out
